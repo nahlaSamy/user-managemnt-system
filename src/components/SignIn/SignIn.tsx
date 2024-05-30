@@ -14,7 +14,7 @@ export default function SignIn() {
       let respone = await axios.post("https://dummyjson.com/auth/login",data)
       console.log("🚀 ~ onSubmit ~ respone:", respone)
       toast.success("You have successfully logged in!");
-      navigate('home/userslist')
+      navigate('/home/userslist')
     } catch (error) {
       toast.error("An error occurred while logging in. Please try again .");
 
