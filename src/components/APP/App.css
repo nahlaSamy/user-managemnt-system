@@ -1,0 +1,8 @@
+.sideBar-conatiner .ps-sidebar-container{
+  background-color: #F2EAE1;
+  height: 100vh;
+}
+
+.sideBar-conatiner .ps-menu-button:hover{
+  background-color: #FEAF00 !important;
+}
