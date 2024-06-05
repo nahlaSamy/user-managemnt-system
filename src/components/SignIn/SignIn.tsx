@@ -1,24 +1,28 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import styles from "./SignIn.module.css";
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { AuthContext } from '../Context/AuthContext';
 
 export default function SignIn() {
- let navigate=useNavigate()
+  let {saveUserData}=useContext(AuthContext)
+  let navigate = useNavigate()
   let { register, handleSubmit, formState: { errors } } = useForm();
-  const onSubmit =async (data:any) => {
+  const onSubmit = async (data: any) => {
     console.log(data);
     try {
-      let respone = await axios.post("https://dummyjson.com/auth/login",data)
-      console.log("🚀 ~ onSubmit ~ respone:", respone)
+      let respone = await axios.post("https://dummyjson.com/auth/login", data)
+      console.log(respone);
+      localStorage.setItem('userToken', respone.data.token);
+      saveUserData();
       toast.success("You have successfully logged in!");
-      navigate('/home/userslist')
+      navigate('/home')
     } catch (error) {
       toast.error("An error occurred while logging in. Please try again .");
 
-      
+
     }
   };
 
@@ -43,8 +47,9 @@ export default function SignIn() {
                 required: "Password is required",
                 pattern: {
                   value: /^.{8,}$/,
-                  message: "Password must be at least 8 characters long"}
-                
+                  message: "Password must be at least 8 characters long"
+                }
+
                 // pattern: {
                 //   value: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/,
                 //   message: "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, and one number"
@@ -52,7 +57,7 @@ export default function SignIn() {
               })} />
             </div>
             {errors.password && (
-              <p className="alert alert-danger">{errors.password.message}</p>
+              <p className="alert alert-danger">{errors?.password?.message}</p>
             )}
             <button type="submit" className='btn btn-warning text-white w-100 py-2'>SIGN IN</button>
           </form>
