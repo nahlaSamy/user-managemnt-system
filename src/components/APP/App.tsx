@@ -33,6 +33,9 @@ function App() {
         { 
           path: 'userdata', element: <UserData />
          },
+         { 
+          path: 'userdata/:userId', element: <UserData />
+         },
         {
            path: 'profile', element: <Profile />
            },

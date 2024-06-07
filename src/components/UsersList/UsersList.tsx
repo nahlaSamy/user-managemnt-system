@@ -25,9 +25,16 @@ export default function UsersList() {
 
     }
   }
-  const navigateToUserDate = () => {
-    navigate('/home/userdata')
-  }
+  const navigateToUserData = (id) => {
+    console.log(id);
+    if (id) {
+      navigate(`/home/userdata/${id}`);
+    } else {
+      console.log("hhhh");
+      
+      navigate('/home/userdata');
+    }
+  };
   const deleteUser = async (id: any) => {
 try {
   let response=  await axios.delete(`https://dummyjson.com/users/${userId}`)
@@ -50,7 +57,7 @@ try {
     <>
       <div className='title d-flex justify-content-between p-4'>
         <h4> UsersList</h4>
-        <button onClick={navigateToUserDate} className='btn btn-warning'>Add New User</button>
+        <button onClick={() => navigateToUserData()} className='btn btn-warning'>Add New User</button>
       </div>
       <div className="table-conatiner p-5">
 
@@ -73,7 +80,7 @@ try {
                 <td>{user.email}</td>
                 <td>{user.phone}</td>
                 <td>{user.age}</td>
-                <td> <i onClick={() => handleShow(user.id)} className='fa fa-trash text-warning mx-2'></i> <i className='fa fa-edit text-warning'></i></td>
+                <td> <i onClick={() => handleShow(user.id)} className='fa fa-trash text-warning mx-2'></i> <i  onClick={() => navigateToUserData(user.id)} className='fa fa-edit text-warning'></i></td>
 
               </tr>) : (
               <tr>
