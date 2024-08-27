@@ -1,28 +1,38 @@
-import React, { useContext, useState } from 'react';
-import styles from "./SignIn.module.css";
-import { useForm } from 'react-hook-form';
 import axios from 'axios';
+import { useContext } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { AuthContext } from '../Context/AuthContext';
+import styles from "./SignIn.module.css";
+
+// Define an interface for form data
+interface SignInFormData {
+  username: string;
+  password: string;
+}
 
 export default function SignIn() {
-  let {saveUserData}=useContext(AuthContext)
-  let navigate = useNavigate()
-  let { register, handleSubmit, formState: { errors } } = useForm();
-  const onSubmit = async (data: any) => {
+  // Directly type the context with a type assertion
+  const authContext = useContext(AuthContext) as { saveUserData: () => void };
+
+  const { saveUserData } = authContext;
+
+  const navigate = useNavigate();
+  const { register, handleSubmit, formState: { errors } } = useForm<SignInFormData>();
+
+  // Define the onSubmit handler with proper typing
+  const onSubmit: SubmitHandler<SignInFormData> = async (data) => {
     console.log(data);
     try {
-      let respone = await axios.post("https://dummyjson.com/auth/login", data)
-      console.log(respone);
-      localStorage.setItem('userToken', respone.data.token);
-      saveUserData();
+      const response = await axios.post("https://dummyjson.com/auth/login", data);
+      console.log(response);
+      localStorage.setItem('userToken', response.data.token);
+      saveUserData(); // Call the function directly
       toast.success("You have successfully logged in!");
-      navigate('/home')
+      navigate('/home');
     } catch (error) {
-      toast.error("An error occurred while logging in. Please try again .");
-
-
+      toast.error("An error occurred while logging in. Please try again.");
     }
   };
 
@@ -36,28 +46,37 @@ export default function SignIn() {
           <form className='my-2' onSubmit={handleSubmit(onSubmit)}>
             <div className="mb-3">
               <label className='mb-2'>Username</label>
-              <input type="text" className="form-control" placeholder="Enter your Username" aria-label="Username" aria-describedby="basic-addon1" {...register("username", { required: "username is required" })} />
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Enter your Username"
+                aria-label="Username"
+                aria-describedby="basic-addon1"
+                {...register("username", { required: "Username is required" })}
+              />
             </div>
             {errors.username && (
-              <p className="alert alert-danger">{errors?.username?.message}</p>
+              <p className="alert alert-danger">{errors.username.message}</p>
             )}
             <div className="mb-3">
               <label className='mb-2'>Password</label>
-              <input type="password" className="form-control" placeholder="Enter your Password" aria-label="Password" aria-describedby="basic-addon1"   {...register("password", {
-                required: "Password is required",
-                pattern: {
-                  value: /^.{8,}$/,
-                  message: "Password must be at least 8 characters long"
-                }
-
-                // pattern: {
-                //   value: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/,
-                //   message: "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, and one number"
-                // }
-              })} />
+              <input
+                type="password"
+                className="form-control"
+                placeholder="Enter your Password"
+                aria-label="Password"
+                aria-describedby="basic-addon1"
+                {...register("password", {
+                  required: "Password is required",
+                  pattern: {
+                    value: /^.{8,}$/,
+                    message: "Password must be at least 8 characters long"
+                  }
+                })}
+              />
             </div>
             {errors.password && (
-              <p className="alert alert-danger">{errors?.password?.message}</p>
+              <p className="alert alert-danger">{errors.password.message}</p>
             )}
             <button type="submit" className='btn btn-warning text-white w-100 py-2'>SIGN IN</button>
           </form>

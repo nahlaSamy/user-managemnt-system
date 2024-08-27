@@ -1,15 +1,15 @@
-import './App.css'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 import AuthLayout from '../common/AuthLayout/AuthLayout'
-import SignIn from '../SignIn/SignIn'
 import MasterLayout from '../common/MasterLayout/MasterLayout'
-import UsersList from '../UsersList/UsersList'
-import UserData from '../UserData/UserData'
-import NotFound from '../NotFound/NotFound'
-import 'react-toastify/dist/ReactToastify.css';
-import { ToastContainer, toast } from 'react-toastify';
 import Home from '../Home/Home'
+import NotFound from '../NotFound/NotFound'
 import Profile from '../Profile/Profile'
+import SignIn from '../SignIn/SignIn'
+import UserData from '../UserData/UserData'
+import UsersList from '../UsersList/UsersList'
+import './App.css'
 
 function App() {
 

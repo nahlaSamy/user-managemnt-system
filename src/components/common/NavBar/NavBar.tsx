@@ -1,10 +1,17 @@
-import React, { useState,useContext } from 'react'
+import { useContext } from 'react';
 import { AuthContext } from '../../Context/AuthContext';
-
 import { Link } from 'react-router-dom';
 
 export default function NavBar() {
-  let {userData}=useContext(AuthContext)
+    // Ensure to handle the case where AuthContext might be undefined
+    const context = useContext(AuthContext);
+
+    if (!context) {
+        // Handle the case where AuthContext is not available (optional)
+        return null;
+    }
+
+    const { userData } = context;
 
     return (
         <nav className="navbar navbar-expand-lg bg-body-tertiary">
@@ -15,7 +22,6 @@ export default function NavBar() {
                 </button>
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
-                     
                         <li className="nav-item">
                             <Link className="nav-link" to="/link">{userData?.email}</Link>
                         </li>

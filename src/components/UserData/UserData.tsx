@@ -1,17 +1,26 @@
-import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { toast } from 'react-toastify';
 import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+
+type FormValues = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  age: number;
+  phone: string;
+  birthDate: string;
+};
 
 export default function UserData() {
-  const { register, handleSubmit, setValue, formState: { errors } } = useForm();
+  const { register, handleSubmit, setValue, formState: { errors } } = useForm<FormValues>();
   const [isUpdate, setIsUpdate] = useState(false);
 
   let navigate = useNavigate();
   const { userId } = useParams();
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: FormValues) => {
     try {
       if (isUpdate) {
         await axios.put(`https://dummyjson.com/users/${userId}`, data);
@@ -35,14 +44,14 @@ export default function UserData() {
           Object.keys(userData).forEach(key => {
             if (key === 'birthDate') {
               const formattedDate = new Date(userData[key]).toISOString().split('T')[0];
-              setValue(key, formattedDate);
+              setValue(key as keyof FormValues, formattedDate);
             } else {
-              setValue(key, userData[key]);
+              setValue(key as keyof FormValues, userData[key]);
             }
           });
         })
         .catch(error => {
-          toast.error("An error occurred while fetching user data.");
+          toast.error(error ? error.message : "An error occurred while fetching user data.");
         });
     }
   }, [userId, setValue]);
@@ -68,7 +77,7 @@ export default function UserData() {
                 />
               </div>
               {errors.firstName && (
-                <p className="alert alert-danger">{errors.firstName.message}</p>
+                <p className="alert alert-danger">{errors.firstName.message as string}</p>
               )}
             </div>
             <div className="col-md-6">
@@ -84,7 +93,7 @@ export default function UserData() {
                 />
               </div>
               {errors.lastName && (
-                <p className="alert alert-danger">{errors.lastName.message}</p>
+                <p className="alert alert-danger">{errors.lastName.message as string}</p>
               )}
             </div>
           </div>
@@ -102,7 +111,7 @@ export default function UserData() {
                 />
               </div>
               {errors.email && (
-                <p className="alert alert-danger">{errors.email.message}</p>
+                <p className="alert alert-danger">{errors.email.message as string}</p>
               )}
             </div>
             <div className="col-md-6">
@@ -118,7 +127,7 @@ export default function UserData() {
                 />
               </div>
               {errors.age && (
-                <p className="alert alert-danger">{errors.age.message}</p>
+                <p className="alert alert-danger">{errors.age.message as string}</p>
               )}
             </div>
           </div>
@@ -132,11 +141,11 @@ export default function UserData() {
                   placeholder="Enter your phone number"
                   aria-label="phone"
                   aria-describedby="basic-addon1"
-                  {...register("phone", { required: "Phone number is required", pattern: { value: /^\d{11}$/, message: "Phone number must be 10 digits"}  })}
+                  {...register("phone", { required: "Phone number is required", pattern: { value: /^\d{10}$/, message: "Phone number must be 10 digits" } })}
                 />
               </div>
               {errors.phone && (
-                <p className="alert alert-danger">{errors.phone.message}</p>
+                <p className="alert alert-danger">{errors.phone.message as string}</p>
               )}
             </div>
             <div className="col-md-6">
@@ -152,7 +161,7 @@ export default function UserData() {
                 />
               </div>
               {errors.birthDate && (
-                <p className="alert alert-danger">{errors.birthDate.message}</p>
+                <p className="alert alert-danger">{errors.birthDate.message as string}</p>
               )}
             </div>
           </div>

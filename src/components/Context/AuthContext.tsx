@@ -1,24 +1,23 @@
-// import jwtDecode from "jwt-decode";
 import { jwtDecode } from "jwt-decode";
 import { PropsWithChildren, createContext, useState } from "react";
 
 interface AuthContextType {
     saveUserData: () => void;
+    userData: any; // Use `any` for userData
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export default function AuthContextProvider(props: PropsWithChildren) {
-    let [userData, setUserData] = useState(null);
+    const [userData, setUserData] = useState<any>(null); // Use `any` for userData
 
     const saveUserData = () => {
         let encodedToken = localStorage.getItem('userToken');
         if (encodedToken) {
-            let decodedToken = jwtDecode(encodedToken);
+            let decodedToken = jwtDecode<any>(encodedToken); // Use `any` for decodedToken
             setUserData(decodedToken);
             console.log(decodedToken);
         } else {
-            // Handle the case where there's no token
             console.error("No token found");
         }
     };
