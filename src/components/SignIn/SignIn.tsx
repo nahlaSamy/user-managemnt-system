@@ -27,7 +27,7 @@ export default function SignIn() {
     try {
       const response = await axios.post("https://dummyjson.com/auth/login", data);
       console.log(response);
-      localStorage.setItem('userToken', response.data.token);
+      localStorage.setItem('userToken', response.data.accessToken);
       saveUserData(); // Call the function directly
       toast.success("You have successfully logged in!");
       navigate('/home');
